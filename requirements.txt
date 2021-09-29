@@ -2,4 +2,4 @@ aiogram
 aiohttp
 aioschedule
 async-timeout
-pymongo
+pymongo==3.12.0
