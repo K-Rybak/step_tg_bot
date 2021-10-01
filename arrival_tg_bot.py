@@ -41,7 +41,7 @@ async def unsubscribe(message: types.Message):
         sub.add_subscriber(message.chat.id, message.from_user.full_name, False)
         await message.reply('Вы и так не попидсаны на рассылку')
     else:
-        sub.update_subsription(message.chat.id, False)
+        sub.update_subscription(message.chat.id, False)
         await message.reply('Вы успешно отписались от рассылки')
 
 # отправка всех опоздавших преподавателей
