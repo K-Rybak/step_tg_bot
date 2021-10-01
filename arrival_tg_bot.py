@@ -4,6 +4,7 @@ import asyncio
 import aioschedule
 import connect_to_bd as db
 import subscribers as sub
+import function_for_bot as fb
 from datetime import datetime
 from aiogram import Bot, Dispatcher, executor, types
 
@@ -20,7 +21,7 @@ async def add_to_bot(message: types.Message):
 
 @dp.message_handler(commands=['today'])
 async def send_today_arrival(message: types.Message):
-    list_of_employees = get_arrival_today()
+    list_of_employees = fb.get_arrival_today()
     await bot.send_message(message.chat.id, list_of_employees)
 
 @dp.message_handler(commands=['subscribe'])
@@ -44,16 +45,16 @@ async def unsubscribe(message: types.Message):
         await message.reply('Вы успешно отписались от рассылки')
 
 
-def get_arrival_today():
-    current_date = datetime.today().strftime("%d.%m.%Y")
-    list_of_employees = record.find({'current_date': current_date, 'status': True})
-    list_arrival_today = 'Список сотрудников на рабочем месте:\n'
-    i = 0
-    for item in list_of_employees:
-        i += 1
-        list_arrival_today += '{}. {} - {}\n'.format(i, item['fullname'], item['arrival_time'])
+# def get_arrival_today():
+#     current_date = datetime.today().strftime("%d.%m.%Y")
+#     list_of_employees = record.find({'current_date': current_date, 'status': True})
+#     list_arrival_today = 'Список сотрудников на рабочем месте:\n'
+#     i = 0
+#     for item in list_of_employees:
+#         i += 1
+#         list_arrival_today += '{}. {} - {}\n'.format(i, item['fullname'], item['arrival_time'])
 
-    return list_arrival_today
+#     return list_arrival_today
 
 #
 async def send_laters():
@@ -76,7 +77,9 @@ async def send_laters():
         print('Опоздавших нет')
 
 async def scheduler():
-    aioschedule.every().day.at("16:42").do(send_laters)
+    aioschedule.every().friday.at("02:50").do(send_laters)
+    aioschedule.every().saturday.at("03:20").do(send_laters)
+    aioschedule.every().sunday.at("03:20").do(send_laters)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
