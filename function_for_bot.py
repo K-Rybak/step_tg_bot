@@ -12,3 +12,12 @@ def get_arrival_today():
         list_arrival_today += '{}. {} - {}\n'.format(i, item['fullname'], item['arrival_time'])
 
     return list_arrival_today
+
+def get_laters_employees(list_of_employees):
+    list_not_arrival = 'Список сотрудников НЕ на рабочем месте:\n'
+    i = 0
+    for item in list_of_employees:
+        i += 1
+        list_not_arrival += '{}. {}\n'.format(i, item['fullname'])
+
+    return list_not_arrival

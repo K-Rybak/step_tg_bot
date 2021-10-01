@@ -29,9 +29,9 @@ async def subscribe(message: types.Message):
     if (not sub.subscriber_exists(message.chat.id)):
         # если юзера нет, добавлем его
         sub.add_subscriber(message.chat.id, message.from_user.full_name)
-        await message.reply('Бот успешно подписались на рассылку')
+        await message.reply('Вы успешно подписались на рассылку')
     else:
-        sub.update_subsription(message.chat.id, True)
+        sub.update_subscription(message.chat.id, True)
         await message.reply('Вы снова подписались на рассылку')
 
 @dp.message_handler(commands=['unsubscribe'])
@@ -44,37 +44,21 @@ async def unsubscribe(message: types.Message):
         sub.update_subsription(message.chat.id, False)
         await message.reply('Вы успешно отписались от рассылки')
 
-
-# def get_arrival_today():
-#     current_date = datetime.today().strftime("%d.%m.%Y")
-#     list_of_employees = record.find({'current_date': current_date, 'status': True})
-#     list_arrival_today = 'Список сотрудников на рабочем месте:\n'
-#     i = 0
-#     for item in list_of_employees:
-#         i += 1
-#         list_arrival_today += '{}. {} - {}\n'.format(i, item['fullname'], item['arrival_time'])
-
-#     return list_arrival_today
-
-#
+# отправка всех опоздавших преподавателей
 async def send_laters():
     position = pos_db.find_one({'position_name': 'Преподаватель МА'})
-    print(position['_id'])
     query = {'status': False, 'position': position['_id']}
+    tg_user_id = sub.get_subscribers()
+
     if record.count_documents(query) != 0:
         list_of_employees = record.find(query)
-        list_arrival_today = 'Список сотрудников НЕ на рабочем месте:\n'
-        i = 0
-        for item in list_of_employees:
-            i += 1
-            list_arrival_today += '{}. {}\n'.format(i, item['fullname'])
-
-        tg_user_id = sub.get_subscribers()
+        list_not_arrival = fb.get_laters_employees(list_of_employees)
+      
         for id in tg_user_id:
-            await bot.send_message(id, list_arrival_today)
-            print(id, list_arrival_today)
+            await bot.send_message(id, list_not_arrival)
     else:
-        print('Опоздавших нет')
+        for id in tg_user_id:
+            await bot.send_message(id, 'Опоздавших нет')
 
 async def scheduler():
     aioschedule.every().friday.at("02:50").do(send_laters)
