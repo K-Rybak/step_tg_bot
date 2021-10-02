@@ -61,10 +61,10 @@ async def send_laters():
             await bot.send_message(id, 'Опоздавших нет')
 
 async def scheduler():
-    aioschedule.every().friday.at("09:00").do(send_laters)
     aioschedule.every().friday.at("02:50").do(send_laters)
     aioschedule.every().saturday.at("03:20").do(send_laters)
     aioschedule.every().sunday.at("03:20").do(send_laters)
+    aioschedule.every().day.at("00:00").do(fb.reset_status_emploees)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)

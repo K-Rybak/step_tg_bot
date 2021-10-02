@@ -21,3 +21,6 @@ def get_laters_employees(list_of_employees):
         list_not_arrival += '{}. {}\n'.format(i, item['fullname'])
 
     return list_not_arrival
+
+def reset_status_emploees():
+    record.update_many({'status': True}, {'$set': {'status': False}})
