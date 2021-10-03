@@ -22,5 +22,5 @@ def get_laters_employees(list_of_employees):
 
     return list_not_arrival
 
-def reset_status_emploees():
-    record.update_many({'status': True}, {'$set': {'status': False}})
+async def reset_status_emploees():
+    await record.update_many({'status': True}, {'$set': {'status': False}})
