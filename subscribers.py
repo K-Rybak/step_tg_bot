@@ -15,8 +15,7 @@ def add_subscriber(tg_user_id, tg_username, status=True):
 
 # обновляем статус подписки
 def update_subscription(tg_user_id, status):
-     return subscribers_colllection.update_one({'tg_user_id': tg_user_id}, 
-     {'$set': {'status': status}})
+    return subscribers_colllection.update_one({'tg_user_id': tg_user_id}, {'$set': {'status': status}})
 
 
 # Получаем все id юзеров
@@ -27,5 +26,14 @@ def get_subscribers():
         tg_id_subscriber.append(id['tg_user_id'])
 
     return tg_id_subscriber
+
+def get_all_users():
+    users = subscribers_colllection.find()
+    tg_id_users = []
+
+    for id in users:
+        tg_id_users.append(id['tg_user_id'])
+    
+    return tg_id_users
     
 
