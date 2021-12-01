@@ -23,6 +23,7 @@ def get_daily_report():
         count += 1
         list_arrival_today += '{}. {} - пришел: {}, ушел: {}\n'.format(count, empl['fullname'], empl['arrival_time'], empl['leaving_time'])
 
+    return list_arrival_today
 
 def get_laters_employees(list_of_employees):
     list_not_arrival = 'Список сотрудников НЕ на рабочем месте:\n'
