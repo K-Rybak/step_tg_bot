@@ -34,5 +34,14 @@ def get_laters_employees(list_of_employees):
 
     return list_not_arrival
 
+def get_laters_employeessh(list_of_employeessh):#new
+    list_not_arrival = 'Список штатников НЕ на рабочем месте:\n'#new
+    i = 0#new
+    for item in list_of_employeessh:#new
+        i += 1#new
+        list_not_arrival += '{}. {}\n'.format(i, item['fullname'])#new
+    
+    return list_not_arrival #new
+
 async def reset_status_emploees():
     await record.update_many({'status': True}, {'$set': {'status': False}})

@@ -1,6 +1,3 @@
-import logging
-import re
-
 from pymongo.message import query
 import config
 import asyncio
@@ -8,7 +5,6 @@ import aioschedule
 import connect_to_bd as db
 import subscribers as sub
 import function_for_bot as fb
-from datetime import datetime
 from aiogram import Bot, Dispatcher, executor, types
 
 bot = Bot(token=config.TOKEN)
@@ -63,6 +59,23 @@ async def send_laters():
         for id in tg_user_id:
             await bot.send_message(id, 'Опоздавших нет')
 
+# отправка всех опоздавших преподавателей штат
+async def send_laterssh():
+    position = pos_db.find_one({'position_name': 'Преподаватель МАШ'})
+    query = {'status': False, 'position': position['_id']}
+    tg_user_id = sub.get_subscribers()
+    
+    if record.count_documents(query) != 0:
+        list_of_employeessh = record.find(query)    #new
+        list_not_arrival = fb.get_laters_employeessh(list_of_employeessh) #new
+        
+        for id in tg_user_id:
+            await bot.send_message(id, list_not_arrival)
+
+    else:
+        for id in tg_user_id:
+            await bot.send_message(id, 'Опоздавших нет')
+
 # рассылка отчета за день, пришедших и ушедших
 async def send_full_daily_report():
     report_list = fb.get_daily_report()
@@ -73,8 +86,12 @@ async def send_full_daily_report():
 
 async def scheduler():
     # время указано по Гринвичу UTC0
-    aioschedule.every().friday.at("02:50").do(send_laters)
+    aioschedule.every().wednesday.at("03:15").do(send_laterssh) #new
+    aioschedule.every().tuesday.at("03:15").do(send_laterssh) #new
+    aioschedule.every().friday.at("02:50").do(send_laterssh) #new
+    aioschedule.every().saturday.at("03:00").do(send_laterssh)#new
     aioschedule.every().saturday.at("03:20").do(send_laters)
+    aioschedule.every().sunday.at("03:00").do(send_laterssh)#new
     aioschedule.every().sunday.at("03:20").do(send_laters)
     aioschedule.every().day.at("14:00").do(send_full_daily_report)
     # aioschedule.every().day.at("00:00").do(fb.reset_status_emploees)
