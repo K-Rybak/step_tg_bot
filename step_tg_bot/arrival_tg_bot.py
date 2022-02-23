@@ -87,7 +87,7 @@ async def send_full_daily_report():
 async def scheduler():
     # время указано по Гринвичу UTC0
     aioschedule.every().wednesday.at("03:15").do(send_laterssh) #new
-    aioschedule.every().tuesday.at("03:15").do(send_laterssh) #new
+    aioschedule.every().thursday.at("03:15").do(send_laterssh) #new
     aioschedule.every().friday.at("02:50").do(send_laterssh) #new
     aioschedule.every().saturday.at("03:00").do(send_laterssh)#new
     aioschedule.every().saturday.at("03:20").do(send_laters)
