@@ -30,8 +30,8 @@ async def subscribe(message: types.Message):
         sub.add_subscriber(message.chat.id, message.from_user.full_name)
         await message.reply('Вы успешно подписались на рассылку')
     else:
-        sub.update_subscription(message.chat.id, True)
-        await message.reply('Вы снова подписались на рассылку')
+        #sub.update_subscription(message.chat.id, True)
+        await message.reply('Вы забанены, за помощью обратитесть к программисту этой шайтан машины')
 
 @dp.message_handler(commands=['unsubscribe'])
 async def unsubscribe(message: types.Message):
@@ -82,7 +82,7 @@ async def send_full_daily_report():
     tg_user_id = sub.get_all_users()
 
     for id in tg_user_id:
-            await bot.send_message(id, report_list)
+        await bot.send_message(id, report_list)
 
 async def scheduler():
     # время указано по Гринвичу UTC0
@@ -94,7 +94,6 @@ async def scheduler():
     aioschedule.every().sunday.at("03:00").do(send_laterssh)#new
     aioschedule.every().sunday.at("03:20").do(send_laters)
     aioschedule.every().day.at("14:00").do(send_full_daily_report)
-    # aioschedule.every().day.at("00:00").do(fb.reset_status_emploees)
     while True:
         await aioschedule.run_pending()
         await asyncio.sleep(1)
