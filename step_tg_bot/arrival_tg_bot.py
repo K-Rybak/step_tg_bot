@@ -1,4 +1,3 @@
-from pymongo.message import query
 import config
 import asyncio
 import aioschedule
@@ -12,7 +11,7 @@ dp = Dispatcher(bot)
 
 record = db.get_empl_collection()
 pos_db = db.get_position_collection()
-subscribers_colllection = db.get_subscribers_collection()
+subscribers_collection = db.get_subscribers_collection()
 
 @dp.message_handler(commands=['start'])
 async def add_to_bot(message: types.Message):
